@@ -1,0 +1,2184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>TikTok Inbox & Coin Plinko</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+:root {
+  --tt-black: #000000;
+  --tt-white: #ffffff;
+  --tt-text: #161823;
+  --tt-subtext: #73747b;
+  --tt-subtext-light: #8a8b91;
+  --tt-red: #fe2c55;
+  --tt-cyan: #25f4ee;
+  --tt-bg: #ffffff;
+  --tt-card-bg: #f8f8f8;
+  --tt-line: #f1f1f2;
+  --tt-pill-blue: #eaf6fc;
+  --tt-pill-blue-text: #1091b3;
+  --font-main: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background: #0f0f12;
+  color: var(--tt-text);
+  font-family: var(--font-main);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+}
+
+/* Phone Viewport */
+.phone-viewport {
+  width: 100%;
+  max-width: 430px;
+  height: 100vh;
+  max-height: 932px;
+  background: #ffffff;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+}
+
+@media (min-width: 500px) {
+  .phone-viewport {
+    height: 880px;
+    border-radius: 44px;
+    border: 9px solid #1c1c1e;
+  }
+}
+#tiktok-screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Header */
+.tt-top-header {
+  height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.tt-top-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.tt-icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  color: #121212;
+  padding: 4px;
+}
+
+.story-avatar-wrap {
+  position: relative;
+  width: 33px;
+  height: 33px;
+  border-radius: 50%;
+  padding: 1.5px;
+  background: linear-gradient(135deg, var(--tt-cyan), var(--tt-red));
+}
+
+.story-avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #eee;
+  display: block;
+}
+
+.story-online-dot {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 9px;
+  height: 9px;
+  background: #20d562;
+  border: 1.5px solid #fff;
+  border-radius: 50%;
+}
+
+.tt-title-capsule {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 800;
+  font-size: 17.5px;
+  color: #121212;
+  cursor: pointer;
+}
+
+.online-pill-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #f1f1f2;
+  padding: 2px 7px;
+  border-radius: 12px;
+}
+
+.online-green-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #20d562;
+}
+
+.online-dot-mini {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #8a8b91;
+}
+
+.tt-top-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+/* Filter Pills */
+.filter-pills-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex-shrink: 0;
+  background: #ffffff;
+}
+.filter-pills-row::-webkit-scrollbar { display: none; }
+
+.filter-pill {
+  height: 34px;
+  border-radius: 10px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  border: none;
+  background: #f1f1f2;
+  color: #161823;
+  transition: transform 0.1s ease;
+}
+.filter-pill:active { transform: scale(0.97); }
+
+.filter-pill.active {
+  background: var(--tt-pill-blue);
+  color: var(--tt-pill-blue-text);
+}
+
+.filter-pill-red-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--tt-red);
+}
+
+.filter-settings-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  padding: 4px 6px;
+  cursor: pointer;
+  color: #161823;
+  display: grid;
+  place-items: center;
+}
+
+/* Scrollable Inbox */
+.inbox-scroll-body {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 74px;
+  -webkit-overflow-scrolling: touch;
+}
+
+.inbox-item-row {
+  display: flex;
+  align-items: center;
+  padding: 11px 16px;
+  gap: 12px;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+.inbox-item-row:active {
+  background: #f8f8f9;
+}
+
+.item-avatar-wrapper {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+}
+
+.avatar-composite-followers {
+  width: 52px;
+  height: 52px;
+  position: relative;
+}
+
+.comp-avatar-back {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #d8d8dc;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  position: absolute;
+  top: 1px;
+  left: 0;
+}
+
+.comp-avatar-front {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #2b2326;
+  border: 2px solid #fff;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  overflow: hidden;
+}
+.comp-avatar-front img { width: 100%; height: 100%; object-fit: cover; }
+
+.comp-badge-add {
+  position: absolute;
+  bottom: -1px;
+  left: 3px;
+  width: 17px;
+  height: 17px;
+  background: #20d5ec;
+  border: 1.5px solid #fff;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #fff;
+}
+
+.avatar-activity-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #fe2c55;
+  display: grid;
+  place-items: center;
+  color: #fff;
+}
+
+.avatar-system-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #0f1c3f;
+  display: grid;
+  place-items: center;
+  color: #fff;
+}
+
+.item-content-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2.5px;
+}
+
+.item-title-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.item-main-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #161823;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.item-verified-badge {
+  color: #20d5ec;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+}
+
+.item-subtitle-desc {
+  font-size: 13px;
+  color: #73747b;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+.badge-unread-number {
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background: var(--tt-red);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  padding: 0 6px;
+  flex-shrink: 0;
+}
+
+.badge-unread-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--tt-red);
+  flex-shrink: 0;
+}
+
+.chat-avatar-circle {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #ececee;
+  display: block;
+}
+
+.chat-camera-action {
+  color: #a0a1a7;
+  padding: 6px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+/* Play & Get Coins Banner */
+.play-coins-banner {
+  margin: 10px 14px 14px 14px;
+  background: linear-gradient(135deg, #ff1744 0%, #fe2c55 50%, #c4002f 100%);
+  border-radius: 18px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 8px 22px rgba(254, 44, 85, 0.32);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.play-coins-banner:active {
+  transform: scale(0.98);
+  box-shadow: 0 4px 12px rgba(254, 44, 85, 0.25);
+}
+
+.play-coins-banner::before {
+  content: "";
+  position: absolute;
+  top: -40%;
+  right: -20%;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(255,255,255,0.28) 0%, rgba(255,255,255,0) 70%);
+  pointer-events: none;
+}
+
+.banner-left-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  z-index: 2;
+}
+
+.banner-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #ffe6eb;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 2px 8px;
+  border-radius: 10px;
+  width: fit-content;
+}
+
+.banner-heading {
+  font-size: 17.5px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.2px;
+}
+
+.banner-subheading {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 600;
+}
+
+.banner-right-visual {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 2;
+}
+
+.banner-coin-icon {
+  width: 44px;
+  height: 44px;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.28));
+  animation: floatSlow 2.4s ease-in-out infinite;
+}
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.banner-arrow-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+}
+
+/* Authentic TikTok Bottom Tab Bar */
+.tt-bottom-tabbar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: #ffffff;
+  border-top: 0.5px solid rgba(0, 0, 0, 0.08);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 20;
+  padding: 0 4px;
+}
+
+.tab-nav-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  background: none;
+  border: none;
+  color: #73747b;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 600;
+  position: relative;
+}
+
+.tab-nav-btn.active {
+  color: #121212;
+  font-weight: 800;
+}
+
+.tab-badge-count {
+  position: absolute;
+  top: -3px;
+  right: 18%;
+  background: var(--tt-red);
+  color: #fff;
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 1px 4.5px;
+  border-radius: 8px;
+  line-height: 1.2;
+}
+
+.create-btn-container {
+  width: 46px;
+  height: 30px;
+  position: relative;
+  cursor: pointer;
+}
+
+.create-btn-layer-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 30px;
+  background: var(--tt-cyan);
+  border-radius: 9px;
+}
+
+.create-btn-layer-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 30px;
+  background: var(--tt-red);
+  border-radius: 9px;
+}
+
+.create-btn-layer-front {
+  position: absolute;
+  top: 0;
+  left: 3px;
+  width: 40px;
+  height: 30px;
+  background: #000000;
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+}
+#plinko-screen {
+  flex: 1;
+  display: none;
+  flex-direction: column;
+  background: #ffffff;
+  height: 100%;
+  overflow-y: auto;
+  position: relative;
+  scrollbar-width: none;
+}
+#plinko-screen::-webkit-scrollbar { display: none; }
+
+.plinko-header {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 0.5px solid rgba(0, 0, 0, 0.06);
+  flex-shrink: 0;
+  background: #ffffff;
+  z-index: 10;
+}
+
+.plinko-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.plinko-back-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  color: #121212;
+  padding: 4px;
+}
+
+.plinko-badge-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #fff0f3;
+  color: var(--tt-red);
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid #ffd4dc;
+}
+
+.plinko-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Balance Pill: Hidden by default, reveals on first multiplier landing */
+.coin-counter-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #ffffff;
+  border: 1.5px solid #ffbe18;
+  border-radius: 20px;
+  padding: 3px 12px 3px 6px;
+  box-shadow: 0 2px 10px rgba(255, 190, 24, 0.25);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.coin-counter-pill.hidden-pill {
+  display: none !important;
+}
+.coin-counter-pill.appear {
+  display: flex !important;
+  animation: pillPop 0.45s cubic-bezier(0.2, 1.4, 0.4, 1);
+}
+@keyframes pillPop {
+  0% { transform: scale(0.3); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.coin-counter-pill.pulse {
+  animation: pillPulse 0.4s ease;
+}
+@keyframes pillPulse {
+  40% { transform: scale(1.1); }
+}
+
+.pill-coin-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.pill-balance-num {
+  font-size: 15px;
+  font-weight: 800;
+  color: #161823;
+  font-variant-numeric: tabular-nums;
+}
+
+.audio-toggle-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--tt-line);
+  background: #f8f8f9;
+  color: var(--tt-text);
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+/* Game Area */
+.plinko-content-wrap {
+  padding: 12px 16px 24px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.plinko-canvas-card {
+  background: #fcfcfc;
+  border: 1px solid #ebebeb;
+  border-radius: 22px;
+  padding: 8px;
+  width: 100%;
+  position: relative;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.02);
+}
+
+canvas#plinko-canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 600 / 520;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+.plinko-actions-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.plinko-drop-btn {
+  font-family: var(--font-main);
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 16px;
+  border-radius: 16px;
+  border: none;
+  background: linear-gradient(180deg, #ff416c 0%, #fe2c55 50%, #c4002f 100%);
+  color: #ffffff;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #9e0323, 0 10px 24px rgba(254, 44, 85, 0.35);
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.plinko-drop-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #9e0323, 0 4px 12px rgba(254, 44, 85, 0.25);
+}
+
+.plinko-withdraw-btn {
+  font-family: var(--font-main);
+  font-size: 15px;
+  font-weight: 700;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1.5px solid #ffbe18;
+  background: #fffdf5;
+  color: #996200;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: transform 0.1s ease;
+}
+.plinko-withdraw-btn:active {
+  transform: scale(0.98);
+}
+.plinko-withdraw-btn.visible {
+  display: flex;
+  animation: pillPop 0.35s ease;
+}
+
+.plinko-hint-text {
+  font-size: 12.5px;
+  color: var(--tt-subtext);
+  text-align: center;
+}
+
+/* Flying win prize effect */
+.flying-prize {
+  position: absolute;
+  pointer-events: none;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--tt-red);
+  text-shadow: 0 2px 5px rgba(255, 255, 255, 0.95);
+  white-space: nowrap;
+  z-index: 70;
+}
+.flying-prize.low {
+  color: var(--tt-subtext);
+}
+.claim-modal-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 80;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(5px);
+  display: none;
+  place-items: center;
+  padding: 16px;
+}
+
+.claim-modal-card {
+  width: 100%;
+  max-width: 360px;
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+  position: relative;
+  animation: modalEnter 0.25s cubic-bezier(0.2, 1.2, 0.4, 1);
+}
+@keyframes modalEnter {
+  0% { transform: scale(0.9); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.modal-coin-badge {
+  width: 58px;
+  height: 58px;
+  margin: 0 auto;
+}
+
+.modal-header {
+  text-align: center;
+}
+
+.modal-header h3 {
+  font-size: 20px;
+  font-weight: 800;
+  color: #121212;
+}
+
+.modal-header p {
+  font-size: 13px;
+  color: var(--tt-subtext);
+  margin-top: 4px;
+}
+
+.modal-score-display {
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--tt-red);
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+.modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.modal-field label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--tt-subtext);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1.5px solid var(--tt-line);
+  background: #f8f8f9;
+  font-size: 15px;
+  font-weight: 600;
+  color: #121212;
+  outline: none;
+}
+.modal-input:focus {
+  border-color: var(--tt-red);
+  background: #fff;
+}
+
+.modal-buttons-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.modal-btn {
+  padding: 13px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 1px solid var(--tt-line);
+  background: #f8f8f9;
+  color: #121212;
+}
+
+.modal-btn.primary {
+  background: var(--tt-red);
+  border-color: var(--tt-red);
+  color: #ffffff;
+}
+
+.modal-loading-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0;
+}
+
+.spinner-tt {
+  width: 44px;
+  height: 44px;
+  border: 3.5px solid #f0f0f2;
+  border-top-color: var(--tt-red);
+  border-radius: 50%;
+  animation: ttSpin 0.75s linear infinite;
+}
+@keyframes ttSpin {
+  100% { transform: rotate(360deg); }
+}
+
+.success-check-badge {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #25d366;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+  font-weight: 800;
+  box-shadow: 0 8px 20px rgba(37, 211, 102, 0.35);
+  animation: checkPop 0.4s cubic-bezier(0.2, 1.3, 0.4, 1);
+}
+@keyframes checkPop {
+  0% { transform: scale(0.4); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+#get-coins-screen {
+  flex: 1;
+  display: none;
+  flex-direction: column;
+  position: relative;
+  background: #f7f7f8;
+  overflow: hidden;
+  height: 100%;
+}
+
+.gc-header {
+  height: 50px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-bottom: 0.5px solid rgba(0,0,0,0.06);
+  flex-shrink: 0;
+}
+
+.gc-back-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  padding: 4px;
+  color: #121212;
+}
+
+.gc-header-title {
+  font-size: 17px;
+  font-weight: 700;
+  color: #121212;
+}
+
+.gc-history-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #121212;
+  padding: 4px;
+}
+
+.gc-scroll-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 16px 90px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  scrollbar-width: none;
+}
+.gc-scroll-content::-webkit-scrollbar { display: none; }
+
+.gc-balance-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.gc-card-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #161823;
+}
+
+.gc-balance-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gc-coin-large {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.gc-balance-num {
+  font-size: 34px;
+  font-weight: 800;
+  color: #161823;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+.gc-recharge-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.gc-recharge-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.gc-pack-item {
+  background: #f8f8f9;
+  border-radius: 12px;
+  padding: 14px 6px 12px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.gc-pack-item.selected {
+  background: #fff5f7;
+  border-color: #fe2c55;
+}
+
+.gc-pack-top {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.gc-pack-coin {
+  width: 17px;
+  height: 17px;
+}
+
+.gc-pack-coins-text {
+  font-size: 16px;
+  font-weight: 800;
+  color: #161823;
+}
+
+.gc-pack-price {
+  font-size: 12px;
+  color: #73747b;
+  font-weight: 500;
+}
+
+.gc-pack-custom-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #161823;
+}
+
+.gc-pack-custom-sub {
+  font-size: 10.5px;
+  color: #8a8b91;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.gc-bottom-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 12px 16px 20px 16px;
+  background: #ffffff;
+  border-top: 0.5px solid rgba(0,0,0,0.06);
+  z-index: 50;
+}
+
+.gc-recharge-btn {
+  width: 100%;
+  padding: 14px;
+  background: #fe2c55;
+  color: #ffffff;
+  border: none;
+  border-radius: 24px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s ease;
+}
+.gc-recharge-btn:active {
+  opacity: 0.88;
+}
+
+.home-indicator {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 134px;
+  height: 5px;
+  background: #000000;
+  border-radius: 10px;
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 100;
+}
+</style>
+</head>
+<body>
+
+<!-- Reusable SVG definition for the authentic TikTok Gold Coin -->
+<svg style="display:none;" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <g id="tiktok-coin-symbol">
+      <!-- Outer pale yellow rim -->
+      <circle cx="50" cy="50" r="48" fill="#FAE383"/>
+      <!-- Mid gold depth contour -->
+      <circle cx="50" cy="50" r="41.5" fill="#E8A80E"/>
+      <!-- Inner rich gold disc -->
+      <circle cx="50" cy="50" r="39" fill="#FABC13"/>
+      <!-- White TikTok musical note glyph -->
+      <path fill="#FFFFFF" d="M48.5 26.5H56c.5 5.3 3.8 9.3 9.5 10.3v7.7c-3.5 0-6.7-1.5-9.5-4v20c0 9-7.2 16-16.2 16s-16.3-7-16.3-16 7.3-16.3 16.3-16.3c1.7 0 3.4.3 5 .7v8c-1.5-.9-3.2-1.4-5-1.4-4.8 0-8.8 3.9-8.8 8.7s4 8.7 8.8 8.7 8.7-3.9 8.7-8.7V26.5z"/>
+    </g>
+  </defs>
+</svg>
+
+<div class="phone-viewport" id="app-viewport">
+  <!-- ================= SCREEN 1: TIKTOK INBOX ================= -->
+  <div id="tiktok-screen">
+    <!-- Header -->
+    <header class="tt-top-header">
+      <div class="tt-top-left">
+        <button class="tt-icon-btn" aria-label="Add friends">
+          <svg style="width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;" viewBox="0 0 24 24">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="8.5" cy="7" r="4"/>
+            <line x1="20" y1="8" x2="20" y2="14"/>
+            <line x1="23" y1="11" x2="17" y2="11"/>
+          </svg>
+        </button>
+        <div class="story-avatar-wrap">
+          <img class="story-avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="My profile">
+          <div class="story-online-dot"></div>
+        </div>
+      </div>
+
+      <div class="tt-title-capsule">
+        <span>Inbox</span>
+        <div class="online-pill-indicator">
+          <div class="online-green-dot"></div>
+          <div class="online-dot-mini"></div>
+          <div class="online-dot-mini"></div>
+        </div>
+      </div>
+
+      <div class="tt-top-right">
+        <button class="tt-icon-btn" aria-label="Search">
+          <svg style="width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </button>
+        <button class="tt-icon-btn" aria-label="More options">
+          <svg style="width:22px;height:22px;fill:currentColor;" viewBox="0 0 24 24">
+            <circle cx="5" cy="12" r="2"/>
+            <circle cx="12" cy="12" r="2"/>
+            <circle cx="19" cy="12" r="2"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Filter Pills Row -->
+    <div class="filter-pills-row">
+      <button class="filter-pill active">Main 55</button>
+      <button class="filter-pill">
+        <span class="filter-pill-red-dot"></span>
+        Requests 99+ &gt;
+      </button>
+      <button class="filter-pill">Unread 2</button>
+      <button class="filter-settings-btn" aria-label="Filter settings">
+        <svg style="width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;" viewBox="0 0 24 24">
+          <line x1="4" y1="21" x2="4" y2="14"/>
+          <line x1="4" y1="10" x2="4" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12" y2="3"/>
+          <line x1="20" y1="21" x2="20" y2="16"/>
+          <line x1="20" y1="12" x2="20" y2="3"/>
+          <line x1="1" y1="14" x2="7" y2="14"/>
+          <line x1="9" y1="8" x2="15" y2="8"/>
+          <line x1="17" y1="16" x2="23" y2="16"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Scrollable Messages Feed -->
+    <div class="inbox-scroll-body">
+      <!-- Follower Activity Row -->
+      <div class="inbox-item-row">
+        <div class="item-avatar-wrapper">
+          <div class="avatar-composite-followers">
+            <div class="comp-avatar-back">
+              <svg style="width:22px;height:22px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            </div>
+            <div class="comp-avatar-front">
+              <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=80&auto=format&fit=crop&q=80" alt="Follower">
+            </div>
+            <div class="comp-badge-add">
+              <svg style="width:11px;height:11px;fill:currentColor" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            </div>
+          </div>
+        </div>
+        <div class="item-content-col">
+          <div class="item-main-title">Ben and 46 others</div>
+          <div class="item-subtitle-desc">started following you</div>
+        </div>
+        <div class="badge-unread-number">47</div>
+      </div>
+
+      <!-- Activity & New Followers Row -->
+      <div class="inbox-item-row">
+        <div class="item-avatar-wrapper">
+          <div class="avatar-activity-icon">
+            <svg style="width:26px;height:26px;fill:currentColor" viewBox="0 0 24 24">
+              <path d="M7 2v11h3v9l7-12h-4l4-8z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="item-content-col">
+          <div class="item-main-title">Activity &amp; new followers</div>
+          <div class="item-subtitle-desc">Alex mentioned you in a video.</div>
+        </div>
+        <div class="badge-unread-number">6</div>
+      </div>
+
+      <!-- System Notifications Row -->
+      <div class="inbox-item-row">
+        <div class="item-avatar-wrapper">
+          <div class="avatar-system-icon">
+            <svg style="width:24px;height:24px;fill:currentColor" viewBox="0 0 24 24">
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z"/>
+              <path d="M7 10h10v2H7z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="item-content-col">
+          <div class="item-main-title">System notifications</div>
+          <div class="item-subtitle-desc">Account updates: System notific... • 7m</div>
+        </div>
+        <div class="badge-unread-dot"></div>
+      </div>
+
+      <!-- INTERACTIVE BANNER: Play & Get Coins -->
+      <div class="play-coins-banner" id="banner-open-game">
+        <div class="banner-left-info">
+          <div class="banner-tag">TikTok Rewards</div>
+          <div class="banner-heading">Play &amp; Get Coins</div>
+          <div class="banner-subheading">Drop coins, win multipliers &amp; withdraw!</div>
+        </div>
+        <div class="banner-right-visual">
+          <div class="banner-coin-icon">
+            <svg viewBox="0 0 100 100" style="width:100%;height:100%;"><use href="#tiktok-coin-symbol"/></svg>
+          </div>
+          <div class="banner-arrow-btn">
+            <svg style="width:16px;height:16px;fill:currentColor" viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Direct Messages -->
+      <div class="inbox-item-row">
+        <img class="chat-avatar-circle" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&auto=format&fit=crop&q=80" alt="Kristen">
+        <div class="item-content-col">
+          <div class="item-main-title">ig: Kristen__blog</div>
+          <div class="item-subtitle-desc">Sent • 12m ago</div>
+        </div>
+        <div class="chat-camera-action">
+          <svg style="width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;" viewBox="0 0 24 24">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="inbox-item-row">
+        <img class="chat-avatar-circle" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80" alt="Victor">
+        <div class="item-content-col">
+          <div class="item-main-title">Victor_v</div>
+          <div class="item-subtitle-desc">Sent • 45m ago</div>
+        </div>
+        <div class="chat-camera-action">
+          <svg style="width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;" viewBox="0 0 24 24">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="inbox-item-row">
+        <img class="chat-avatar-circle" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80" alt="Joanna">
+        <div class="item-content-col">
+          <div class="item-title-row">
+            <span class="item-main-title">JoannaPrzetakiewicz</span>
+            <span class="item-verified-badge">
+              <svg style="width:14px;height:14px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </span>
+          </div>
+          <div class="item-subtitle-desc">Sent • 2h ago</div>
+        </div>
+        <div class="chat-camera-action">
+          <svg style="width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;" viewBox="0 0 24 24">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="inbox-item-row">
+        <img class="chat-avatar-circle" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&auto=format&fit=crop&q=80" alt="Dariusz">
+        <div class="item-content-col">
+          <div class="item-title-row">
+            <span class="item-main-title">dariusz-wieteska</span>
+            <span class="item-verified-badge">
+              <svg style="width:14px;height:14px;fill:currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </span>
+          </div>
+          <div class="item-subtitle-desc">Sent • 4h ago</div>
+        </div>
+        <div class="chat-camera-action">
+          <svg style="width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;" viewBox="0 0 24 24">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="inbox-item-row">
+        <img class="chat-avatar-circle" src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100&auto=format&fit=crop&q=80" alt="Purple Page">
+        <div class="item-content-col">
+          <div class="item-main-title">🟣PURPLE page🟣</div>
+          <div class="item-subtitle-desc">Check out the new drops tonight! • 1d ago</div>
+        </div>
+        <div class="chat-camera-action">
+          <svg style="width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;" viewBox="0 0 24 24">
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+            <circle cx="12" cy="13" r="4"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Authentic TikTok Bottom Bar -->
+    <nav class="tt-bottom-tabbar">
+      <button class="tab-nav-btn">
+        <svg style="width:22px;height:22px;fill:currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+        <span>Home</span>
+      </button>
+
+      <button class="tab-nav-btn">
+        <svg style="width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10"/>
+          <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>
+        </svg>
+        <span>Discover</span>
+      </button>
+
+      <div class="create-btn-container">
+        <div class="create-btn-layer-left"></div>
+        <div class="create-btn-layer-right"></div>
+        <div class="create-btn-layer-front">
+          <svg style="width:16px;height:16px;fill:currentColor" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+        </div>
+      </div>
+
+      <button class="tab-nav-btn active">
+        <svg style="width:22px;height:22px;fill:currentColor" viewBox="0 0 24 24">
+          <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 9h12v2H6V9zm8 5H6v-2h8v2zm4-6H6V6h12v2z"/>
+        </svg>
+        <span>Inbox</span>
+        <span class="tab-badge-count">99+</span>
+      </button>
+
+      <button class="tab-nav-btn">
+        <svg style="width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;" viewBox="0 0 24 24">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span>Profile</span>
+      </button>
+    </nav>
+  </div>
+  <!-- ================= SCREEN 2: PLINKO GAME ================= -->
+  <div id="plinko-screen">
+    <header class="plinko-header">
+      <div class="plinko-nav-left">
+        <button class="plinko-back-btn" id="btn-exit-game" aria-label="Back to TikTok">
+          <svg style="width:24px;height:24px;fill:currentColor" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+        </button>
+        <span class="plinko-badge-tag">TikTok Rewards</span>
+      </div>
+
+      <div class="plinko-nav-right">
+        <!-- Balance Pill starts hidden until first multiplier hit -->
+        <div class="coin-counter-pill hidden-pill" id="pill-open-claim" title="Tap to withdraw coins">
+          <div class="pill-coin-icon">
+            <svg viewBox="0 0 100 100" style="width:100%;height:100%;"><use href="#tiktok-coin-symbol"/></svg>
+          </div>
+          <span class="pill-balance-num" id="live-balance-text">0</span>
+        </div>
+        <button class="audio-toggle-btn" id="audio-toggle-btn" title="Toggle Sound">♪</button>
+      </div>
+    </header>
+
+    <div class="plinko-content-wrap">
+      <div class="plinko-canvas-card">
+        <canvas id="plinko-canvas" width="600" height="520"></canvas>
+      </div>
+
+      <div class="plinko-actions-col">
+        <button class="plinko-drop-btn" id="btn-drop-coin" type="button">
+          DROP COIN
+        </button>
+
+        <button class="plinko-withdraw-btn" id="btn-quick-withdraw" type="button">
+          <svg viewBox="0 0 100 100" style="width:20px;height:20px;"><use href="#tiktok-coin-symbol"/></svg>
+          <span>Withdraw coins</span>
+        </button>
+      </div>
+
+      <p class="plinko-hint-text">Tap anywhere on the board or press DROP COIN</p>
+    </div>
+  </div>
+  <!-- Withdrawal Modal -->
+  <div class="claim-modal-overlay" id="claim-modal">
+    <div class="claim-modal-card">
+      <div class="modal-coin-badge">
+        <svg viewBox="0 0 100 100" style="width:100%;height:100%;"><use href="#tiktok-coin-symbol"/></svg>
+      </div>
+
+      <!-- Step 1: Input view -->
+      <div id="modal-initial-view" style="display:flex; flex-direction:column; gap:16px;">
+        <div class="modal-header">
+          <h3>Withdraw Coins</h3>
+          <p>Transfer your winning coins to your account</p>
+        </div>
+
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--tt-subtext);text-transform:uppercase;text-align:center;">Withdrawable Balance</div>
+          <div class="modal-score-display" id="modal-display-balance">0</div>
+        </div>
+
+        <div class="modal-field">
+          <label for="input-nickname">TikTok Username</label>
+          <input class="modal-input" id="input-nickname" type="text" maxlength="24" placeholder="@your_username" spellcheck="false" autocomplete="off">
+          <span id="nickname-error" style="color:var(--tt-red);font-size:11.5px;min-height:14px;"></span>
+        </div>
+
+        <div class="modal-buttons-row">
+          <button class="modal-btn" id="btn-close-modal" type="button">Cancel</button>
+          <button class="modal-btn primary" id="btn-submit-score" type="button">Withdraw</button>
+        </div>
+      </div>
+
+      <!-- Step 2 & 3: Loading & Success views -->
+      <div id="modal-status-view" style="display:none;">
+        <div class="modal-loading-box">
+          <div class="spinner-tt" id="modal-spinner"></div>
+          <div class="success-check-badge" id="modal-success-check" style="display:none;">✓</div>
+          <h3 id="modal-status-title" style="font-size:17px;font-weight:800;color:var(--tt-text);text-align:center;"></h3>
+          <p id="modal-status-subtitle" style="font-size:13px;color:var(--tt-subtext);text-align:center;"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ================= SCREEN 3: TIKTOK GET COINS ================= -->
+  <div id="get-coins-screen">
+    <header class="gc-header">
+      <button class="gc-back-btn" id="gc-back-btn" aria-label="Back to TikTok">
+        <svg style="width:22px;height:22px;fill:currentColor" viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>
+      </button>
+      <span class="gc-header-title">Get Coins</span>
+      <button class="gc-history-btn" aria-label="Transaction history">
+        <svg style="width:22px;height:22px;fill:currentColor" viewBox="0 0 24 24">
+          <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+        </svg>
+      </button>
+    </header>
+
+    <div class="gc-scroll-content">
+      <!-- Coin balance card -->
+      <section class="gc-balance-card">
+        <span class="gc-card-label">Coin balance</span>
+        <div class="gc-balance-row">
+          <div class="gc-coin-large">
+            <svg viewBox="0 0 100 100" style="width:100%;height:100%;"><use href="#tiktok-coin-symbol"/></svg>
+          </div>
+          <span class="gc-balance-num" id="gc-live-balance">0</span>
+        </div>
+      </section>
+
+      <!-- Recharge grid card -->
+      <section class="gc-recharge-card">
+        <span class="gc-card-label">Recharge</span>
+        
+        <div class="gc-recharge-grid">
+          <!-- 20 coins (selected default) -->
+          <div class="gc-pack-item selected">
+            <div class="gc-pack-top">
+              <div class="gc-pack-coin">
+                <svg viewBox="0 0 100 100" style="width:100%;height:100%;"><use href="#tiktok-coin-symbol"/></svg>
+              </div>
+              <span class="gc-pack-coins-text">20</span>
+            </div>
+            <span class="gc-pack-price">0,39 US$</span>
+          </div>
+
+          <!-- 70 coins -->
+          <div class="gc-pack-item">
+            <div class="gc-pack-top">
+              <div class="gc-pack-coin">
+                <svg viewBox="0 0 100 100" style="width:100%;height:100%;"><use href="#tiktok-coin-symbol"/></svg>
+              </div>
+              <span class="gc-pack-coins-text">70</span>
+            </div>
+            <span class="gc-pack-price">1,29 US$</span>
+          </div>
+
+          <!-- 350 coins -->
+          <div class="gc-pack-item">
+            <div class="gc-pack-top">
+              <div class="gc-pack-coin">
+                <svg viewBox="0 0 100 100" style="width:100%;height:100%;"><use href="#tiktok-coin-symbol"/></svg>
+              </div>
+              <span class="gc-pack-coins-text">350</span>
+            </div>
+            <span class="gc-pack-price">6,00 US$</span>
+          </div>
+
+          <!-- 700 coins -->
+          <div class="gc-pack-item">
+            <div class="gc-pack-top">
+              <div class="gc-pack-coin">
+                <svg viewBox="0 0 100 100" style="width:100%;height:100%;"><use href="#tiktok-coin-symbol"/></svg>
+              </div>
+              <span class="gc-pack-coins-text">700</span>
+            </div>
+            <span class="gc-pack-price">12,00 US$</span>
+          </div>
+
+          <!-- 1,400 coins -->
+          <div class="gc-pack-item">
+            <div class="gc-pack-top">
+              <div class="gc-pack-coin">
+                <svg viewBox="0 0 100 100" style="width:100%;height:100%;"><use href="#tiktok-coin-symbol"/></svg>
+              </div>
+              <span class="gc-pack-coins-text">1,400</span>
+            </div>
+            <span class="gc-pack-price">24,00 US$</span>
+          </div>
+
+          <!-- 3,500 coins -->
+          <div class="gc-pack-item">
+            <div class="gc-pack-top">
+              <div class="gc-pack-coin">
+                <svg viewBox="0 0 100 100" style="width:100%;height:100%;"><use href="#tiktok-coin-symbol"/></svg>
+              </div>
+              <span class="gc-pack-coins-text">3,500</span>
+            </div>
+            <span class="gc-pack-price">60,00 US$</span>
+          </div>
+
+          <!-- 7,000 coins -->
+          <div class="gc-pack-item">
+            <div class="gc-pack-top">
+              <div class="gc-pack-coin">
+                <svg viewBox="0 0 100 100" style="width:100%;height:100%;"><use href="#tiktok-coin-symbol"/></svg>
+              </div>
+              <span class="gc-pack-coins-text">7,000</span>
+            </div>
+            <span class="gc-pack-price">120,99 US$</span>
+          </div>
+
+          <!-- 17,500 coins -->
+          <div class="gc-pack-item">
+            <div class="gc-pack-top">
+              <div class="gc-pack-coin">
+                <svg viewBox="0 0 100 100" style="width:100%;height:100%;"><use href="#tiktok-coin-symbol"/></svg>
+              </div>
+              <span class="gc-pack-coins-text">17,500</span>
+            </div>
+            <span class="gc-pack-price">300,00 US$</span>
+          </div>
+
+          <!-- Custom pack -->
+          <div class="gc-pack-item">
+            <span class="gc-pack-custom-title">Custom</span>
+            <span class="gc-pack-custom-sub">Larger amounts supported</span>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Sticky bottom recharge button -->
+    <div class="gc-bottom-bar">
+      <button class="gc-recharge-btn" type="button">Recharge</button>
+    </div>
+  </div>
+
+  <!-- iOS Home Bar Indicator -->
+  <div class="home-indicator"></div>
+
+</div>
+<script>
+// Screen Navigation
+const tiktokScreen = document.getElementById('tiktok-screen');
+const plinkoScreen = document.getElementById('plinko-screen');
+const getCoinsScreen = document.getElementById('get-coins-screen');
+const openGameBanner = document.getElementById('banner-open-game');
+const exitGameBtn = document.getElementById('btn-exit-game');
+const gcBackBtn = document.getElementById('gc-back-btn');
+const gcLiveBalance = document.getElementById('gc-live-balance');
+const appViewport = document.getElementById('app-viewport');
+
+// Interactive pack selection on Get Coins screen
+document.querySelectorAll('.gc-pack-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.gc-pack-item').forEach(el => el.classList.remove('selected'));
+    item.classList.add('selected');
+  });
+});
+
+exitGameBtn.addEventListener('click', () => {
+  plinkoScreen.style.display = 'none';
+  tiktokScreen.style.display = 'flex';
+});
+
+gcBackBtn.addEventListener('click', () => {
+  getCoinsScreen.style.display = 'none';
+  tiktokScreen.style.display = 'flex';
+});
+
+let audioCtx = null;
+let audioEnabled = true;
+
+function initAudio() {
+  if (!audioCtx) {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (AudioContextClass) audioCtx = new AudioContextClass();
+  }
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+}
+
+function playAudioTone(freq, dur = 0.08, vol = 0.03, type = 'sine') {
+  if (!audioEnabled) return;
+  try {
+    initAudio();
+    if (!audioCtx) return;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + dur);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + dur);
+  } catch(e) {}
+}
+
+function playPegBounceSound() {
+  playAudioTone(880 + Math.random() * 440, 0.04, 0.015, 'sine');
+}
+
+function playWinChime(multiplier) {
+  const baseFreq = multiplier >= 4 ? 660 : (multiplier >= 1.3 ? 520 : 380);
+  playAudioTone(baseFreq, 0.16, 0.04, 'sine');
+  if (multiplier >= 2) {
+    setTimeout(() => playAudioTone(baseFreq * 1.33, 0.22, 0.04, 'sine'), 80);
+  }
+  if (multiplier >= 9) {
+    setTimeout(() => playAudioTone(baseFreq * 1.66, 0.35, 0.05, 'sine'), 160);
+  }
+}
+
+const audioToggleBtn = document.getElementById('audio-toggle-btn');
+audioToggleBtn.addEventListener('click', () => {
+  audioEnabled = !audioEnabled;
+  audioToggleBtn.textContent = audioEnabled ? '♪' : '✕';
+  audioToggleBtn.style.opacity = audioEnabled ? '1' : '0.5';
+});
+(function() {
+  const WIDTH = 600;
+  const HEIGHT = 520;
+  const ROWS = 12;
+  const PIN_SPACING = 40;
+  const TOP_OFFSET = 52;
+  const ROW_GAP = 35.2;
+  const LAST_Y = TOP_OFFSET + (ROWS - 1) * ROW_GAP;
+  const SLOT_Y = LAST_Y + 34;
+  const SLOT_HEIGHT = 32;
+  const MULTIPLIERS = [26, 9, 4, 2, 1.3, 0.7, 0.4, 0.7, 1.3, 2, 4, 9, 26];
+  const BASE_BET = 100;
+  const numFormatter = new Intl.NumberFormat('en-US');
+
+  const canvas = document.getElementById('plinko-canvas');
+  const ctx = canvas.getContext('2d');
+  const balanceText = document.getElementById('live-balance-text');
+  const balancePill = document.getElementById('pill-open-claim');
+  const quickWithdrawBtn = document.getElementById('btn-quick-withdraw');
+  const dropBtn = document.getElementById('btn-drop-coin');
+
+  let balance = 0;
+  let animatedBalance = 0;
+  let activeCoins = [];
+  let balanceRevealed = false;
+
+  // Pre-render TikTok Coin onto offscreen canvas for instantaneous 60fps rendering
+  const coinCanvas = document.createElement('canvas');
+  coinCanvas.width = 64;
+  coinCanvas.height = 64;
+  const cctx = coinCanvas.getContext('2d');
+  if (cctx) {
+    // Pale yellow rim
+    cctx.fillStyle = '#FAE383';
+    cctx.beginPath();
+    cctx.arc(32, 32, 31, 0, Math.PI * 2);
+    cctx.fill();
+
+    // Darker gold contour
+    cctx.fillStyle = '#E8A80E';
+    cctx.beginPath();
+    cctx.arc(32, 32, 27, 0, Math.PI * 2);
+    cctx.fill();
+
+    // Rich gold face
+    cctx.fillStyle = '#FABC13';
+    cctx.beginPath();
+    cctx.arc(32, 32, 25, 0, Math.PI * 2);
+    cctx.fill();
+
+    // TikTok musical note glyph
+    cctx.save();
+    cctx.translate(19.5, 14.5);
+    cctx.scale(0.34, 0.34);
+    const glyphPath = new Path2D('M48.5 26.5H56c.5 5.3 3.8 9.3 9.5 10.3v7.7c-3.5 0-6.7-1.5-9.5-4v20c0 9-7.2 16-16.2 16s-16.3-7-16.3-16 7.3-16.3 16.3-16.3c1.7 0 3.4.3 5 .7v8c-1.5-.9-3.2-1.4-5-1.4-4.8 0-8.8 3.9-8.8 8.7s4 8.7 8.8 8.7 8.7-3.9 8.7-8.7V26.5z');
+    cctx.fillStyle = '#FFFFFF';
+    cctx.fill(glyphPath);
+    cctx.restore();
+  }
+
+  function showBalancePill() {
+    if (balanceRevealed) return;
+    balanceRevealed = true;
+    balancePill.classList.remove('hidden-pill');
+    balancePill.classList.add('appear');
+    quickWithdrawBtn.classList.add('visible');
+  }
+
+  function animateBalanceCounter() {
+    const diff = balance - animatedBalance;
+    if (Math.abs(diff) < 1) {
+      animatedBalance = balance;
+    } else {
+      animatedBalance += diff * 0.18;
+      requestAnimationFrame(animateBalanceCounter);
+    }
+    balanceText.textContent = numFormatter.format(Math.round(animatedBalance));
+  }
+
+  // Peg setup
+  const pegs = [];
+  for (let r = 0; r < ROWS; r++) {
+    const pinCount = r + 3;
+    const xStart = WIDTH / 2 - (pinCount - 1) * PIN_SPACING / 2;
+    for (let c = 0; c < pinCount; c++) {
+      pegs.push({
+        x: xStart + c * PIN_SPACING,
+        y: TOP_OFFSET + r * ROW_GAP,
+        glow: 0
+      });
+    }
+  }
+
+  const slotStartLeft = WIDTH / 2 - (ROWS + 1) * PIN_SPACING / 2;
+  const slots = MULTIPLIERS.map(() => ({ bounce: 0 }));
+
+  function getSlotColor(index) {
+    const dist = Math.abs(index - 6);
+    if (dist >= 5) return '#fe2c55';
+    if (dist >= 3) return '#ff7a45';
+    if (dist >= 2) return '#ffbe18';
+    return '#ffd4dc';
+  }
+
+  function getSlotTextColor(index) {
+    return Math.abs(index - 6) >= 3 ? '#ffffff' : '#121212';
+  }
+
+  let scale = 1;
+  let dpr = 1;
+
+  function handleResize() {
+    const rect = canvas.getBoundingClientRect();
+    if (!rect.width || rect.width <= 0) return;
+    dpr = window.devicePixelRatio || 1;
+    scale = rect.width / WIDTH;
+    canvas.width = Math.round(rect.width * dpr);
+    canvas.height = Math.round(rect.width * (HEIGHT / WIDTH) * dpr);
+  }
+
+  window.addEventListener('resize', handleResize);
+  new ResizeObserver(handleResize).observe(canvas);
+
+  openGameBanner.addEventListener('click', () => {
+    tiktokScreen.style.display = 'none';
+    getCoinsScreen.style.display = 'none';
+    plinkoScreen.style.display = 'flex';
+    requestAnimationFrame(() => {
+      handleResize();
+      setTimeout(handleResize, 40);
+    });
+  });
+
+  let lastDropTime = 0;
+  function dropCoin() {
+    const now = performance.now();
+    if (now - lastDropTime < 80) return;
+    lastDropTime = now;
+
+    initAudio();
+    activeCoins.push({
+      x: WIDTH / 2 + (Math.random() - 0.5) * 12,
+      y: 12,
+      vx: (Math.random() - 0.5) * 36,
+      vy: 15,
+      rot: Math.random() * Math.PI,
+      settled: false
+    });
+    playAudioTone(300, 0.06, 0.03, 'sine');
+  }
+
+  dropBtn.addEventListener('click', dropCoin);
+  canvas.addEventListener('click', dropCoin);
+  function triggerCoinPrizeFlyer(winAmount, slotIndex, multiplier) {
+    showBalancePill();
+
+    const canvasRect = canvas.getBoundingClientRect();
+    const viewportRect = appViewport.getBoundingClientRect();
+    const slotCenterX = slotStartLeft + (slotIndex + 0.5) * PIN_SPACING;
+    const startX = canvasRect.left - viewportRect.left + slotCenterX * scale;
+    const startY = canvasRect.top - viewportRect.top + (SLOT_Y + SLOT_HEIGHT / 2) * scale;
+
+    const credit = () => {
+      balance += winAmount;
+      animateBalanceCounter();
+      balancePill.classList.remove('pulse');
+      void balancePill.offsetWidth;
+      balancePill.classList.add('pulse');
+    };
+
+    const flyer = document.createElement('div');
+    flyer.className = 'flying-prize' + (multiplier < 1 ? ' low' : '');
+    flyer.textContent = '+' + numFormatter.format(winAmount);
+    flyer.style.left = startX + 'px';
+    flyer.style.top = startY + 'px';
+    appViewport.appendChild(flyer);
+
+    const pillRect = balanceText.getBoundingClientRect();
+    const destX = pillRect.left - viewportRect.left + pillRect.width / 2 - startX;
+    const destY = pillRect.top - viewportRect.top + pillRect.height / 2 - startY;
+
+    const animation = flyer.animate([
+      { transform: 'translate(-50%, -50%) scale(0.5)', opacity: 0 },
+      { transform: 'translate(-50%, -180%) scale(1.25)', opacity: 1, offset: 0.35 },
+      { transform: 'translate(-50%, -180%) scale(1.1)', opacity: 1, offset: 0.5 },
+      { transform: `translate(calc(-50% + ${destX}px), calc(-50% + ${destY}px)) scale(0.4)`, opacity: 0.85 }
+    ], {
+      duration: 1100,
+      easing: 'cubic-bezier(0.35, 0, 0.25, 1)'
+    });
+
+    animation.onfinish = () => {
+      flyer.remove();
+      credit();
+    };
+  }
+
+  function handleSlotLanding(coin) {
+    const index = Math.max(0, Math.min(MULTIPLIERS.length - 1, Math.floor((coin.x - slotStartLeft) / PIN_SPACING)));
+    const mult = MULTIPLIERS[index];
+    const win = Math.round(BASE_BET * mult);
+    slots[index].bounce = 1;
+    playWinChime(mult);
+    triggerCoinPrizeFlyer(win, index, mult);
+  }
+
+  const GRAVITY = 1500;
+  const COIN_RADIUS = 9.5;
+  const PEG_RADIUS = 5.2;
+  const RESTITUTION = 0.44;
+
+  function updateCoinPhysics(coin, dt) {
+    coin.vy += GRAVITY * dt;
+    coin.x += coin.vx * dt;
+    coin.y += coin.vy * dt;
+    coin.rot += coin.vx * dt * 0.05;
+
+    for (const peg of pegs) {
+      const dx = coin.x - peg.x;
+      const dy = coin.y - peg.y;
+      const distSq = dx * dx + dy * dy;
+      const minDistance = COIN_RADIUS + PEG_RADIUS;
+
+      if (distSq < minDistance * minDistance) {
+        const dist = Math.sqrt(distSq) || 0.01;
+        const normX = dx / dist;
+        const normY = dy / dist;
+
+        coin.x = peg.x + normX * minDistance;
+        coin.y = peg.y + normY * minDistance;
+
+        const velAlongNorm = coin.vx * normX + coin.vy * normY;
+        if (velAlongNorm < 0) {
+          coin.vx -= (1 + RESTITUTION) * velAlongNorm * normX;
+          coin.vy -= (1 + RESTITUTION) * velAlongNorm * normY;
+          coin.vx += (-normY) * (Math.random() - 0.5) * 65;
+          if (Math.abs(normX) < 0.15) {
+            coin.vx += (Math.random() < 0.5 ? -1 : 1) * 60;
+          }
+          if (peg.glow < 0.5) playPegBounceSound();
+          peg.glow = 1;
+        }
+      }
+    }
+
+    const rowFraction = Math.max(0, Math.min(ROWS - 1, (coin.y - TOP_OFFSET) / ROW_GAP));
+    const sideBoundary = (rowFraction + 2) * PIN_SPACING / 2 + PIN_SPACING * 0.35;
+    if (coin.x < WIDTH / 2 - sideBoundary) {
+      coin.x = WIDTH / 2 - sideBoundary;
+      coin.vx = Math.abs(coin.vx) * 0.5;
+    }
+    if (coin.x > WIDTH / 2 + sideBoundary) {
+      coin.x = WIDTH / 2 + sideBoundary;
+      coin.vx = -Math.abs(coin.vx) * 0.5;
+    }
+
+    const speed = Math.hypot(coin.vx, coin.vy);
+    if (speed > 820) {
+      coin.vx *= 820 / speed;
+      coin.vy *= 820 / speed;
+    }
+
+    if (coin.y >= LAST_Y + 20 && !coin.settled) {
+      coin.settled = true;
+      handleSlotLanding(coin);
+    }
+  }
+
+  function drawRoundedRect(x, y, w, h, r) {
+    if (ctx.roundRect) {
+      ctx.beginPath();
+      ctx.roundRect(x, y, w, h, r);
+      return;
+    }
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function drawShinyCoin(x, y, rot) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rot);
+    ctx.drawImage(coinCanvas, -COIN_RADIUS, -COIN_RADIUS, COIN_RADIUS * 2, COIN_RADIUS * 2);
+    ctx.restore();
+  }
+
+  function renderScene() {
+    const currentScale = scale > 0 ? scale : 1;
+    ctx.setTransform(currentScale * dpr, 0, 0, currentScale * dpr, 0, 0);
+    ctx.clearRect(0, 0, WIDTH, HEIGHT);
+
+    // Spawner capsule
+    ctx.fillStyle = 'rgba(254, 44, 85, 0.12)';
+    drawRoundedRect(WIDTH / 2 - 24, 0, 48, 22, 9);
+    ctx.fill();
+
+    // Pegs
+    for (const peg of pegs) {
+      if (peg.glow > 0) {
+        ctx.fillStyle = `rgba(254, 44, 85, ${peg.glow * 0.28})`;
+        ctx.beginPath();
+        ctx.arc(peg.x, peg.y, PEG_RADIUS + 8 * peg.glow, 0, Math.PI * 2);
+        ctx.fill();
+        peg.glow = Math.max(0, peg.glow - 0.04);
+      }
+      ctx.fillStyle = peg.glow > 0.1 ? '#fe2c55' : '#c9b4b7';
+      ctx.beginPath();
+      ctx.arc(peg.x, peg.y, PEG_RADIUS, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Multiplier slots
+    MULTIPLIERS.forEach((multiplier, i) => {
+      const slot = slots[i];
+      const bounceOffset = slot.bounce * 7;
+      slot.bounce = Math.max(0, slot.bounce - 0.06);
+
+      const slotX = slotStartLeft + i * PIN_SPACING + 2;
+      const slotY = SLOT_Y + bounceOffset;
+
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+      drawRoundedRect(slotX, slotY + 4, PIN_SPACING - 4, SLOT_HEIGHT, 8);
+      ctx.fill();
+
+      ctx.fillStyle = getSlotColor(i);
+      drawRoundedRect(slotX, slotY, PIN_SPACING - 4, SLOT_HEIGHT, 8);
+      ctx.fill();
+
+      ctx.fillStyle = getSlotTextColor(i);
+      ctx.font = '800 ' + (multiplier >= 10 ? 11 : 12) + 'px "Plus Jakarta Sans", system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(multiplier + '×', slotX + (PIN_SPACING - 4) / 2, slotY + SLOT_HEIGHT / 2 + 1);
+    });
+
+    // Active Coins
+    for (const coin of activeCoins) {
+      drawShinyCoin(coin.x, coin.y, coin.rot);
+    }
+  }
+
+  let lastTime = performance.now();
+  let accumulator = 0;
+  const PHYSICS_STEP = 1 / 240;
+
+  function mainGameLoop(now) {
+    accumulator += Math.min(0.05, (now - lastTime) / 1000);
+    lastTime = now;
+    while (accumulator >= PHYSICS_STEP) {
+      for (const coin of activeCoins) {
+        updateCoinPhysics(coin, PHYSICS_STEP);
+      }
+      accumulator -= PHYSICS_STEP;
+    }
+    activeCoins = activeCoins.filter(c => c.y < HEIGHT + 20);
+    renderScene();
+    requestAnimationFrame(mainGameLoop);
+  }
+
+  requestAnimationFrame(mainGameLoop);
+  const claimModal = document.getElementById('claim-modal');
+  const modalBalanceDisplay = document.getElementById('modal-display-balance');
+  const inputNickname = document.getElementById('input-nickname');
+  const nicknameError = document.getElementById('nickname-error');
+  const btnCloseModal = document.getElementById('btn-close-modal');
+  const btnSubmitScore = document.getElementById('btn-submit-score');
+
+  const modalInitialView = document.getElementById('modal-initial-view');
+  const modalStatusView = document.getElementById('modal-status-view');
+  const modalSpinner = document.getElementById('modal-spinner');
+  const modalSuccessCheck = document.getElementById('modal-success-check');
+  const modalStatusTitle = document.getElementById('modal-status-title');
+  const modalStatusSubtitle = document.getElementById('modal-status-subtitle');
+
+  function openWithdrawalModal() {
+    modalBalanceDisplay.textContent = numFormatter.format(balance);
+    nicknameError.textContent = '';
+    modalInitialView.style.display = 'flex';
+    modalStatusView.style.display = 'none';
+    claimModal.style.display = 'grid';
+    setTimeout(() => inputNickname.focus(), 60);
+  }
+
+  balancePill.addEventListener('click', openWithdrawalModal);
+  quickWithdrawBtn.addEventListener('click', openWithdrawalModal);
+
+  function hideModal() {
+    claimModal.style.display = 'none';
+  }
+
+  btnCloseModal.addEventListener('click', hideModal);
+  claimModal.addEventListener('click', (e) => {
+    if (e.target === claimModal && modalInitialView.style.display !== 'none') hideModal();
+  });
+
+  btnSubmitScore.addEventListener('click', () => {
+    const val = inputNickname.value.trim();
+    if (val.length < 2) {
+      nicknameError.textContent = 'Please enter at least 2 characters';
+      inputNickname.focus();
+      return;
+    }
+
+    const currentBalanceToWithdraw = balance;
+
+    // Step 1: Loading state (English)
+    modalInitialView.style.display = 'none';
+    modalStatusView.style.display = 'block';
+    modalSpinner.style.display = 'block';
+    modalSuccessCheck.style.display = 'none';
+    modalStatusTitle.textContent = `Sending to @${val.replace(/^@/, '')}...`;
+    modalStatusSubtitle.textContent = `Transferring ${numFormatter.format(currentBalanceToWithdraw)} coins`;
+
+    playAudioTone(440, 0.1, 0.04, 'sine');
+
+    // Simulate sending to TikTok account
+    setTimeout(() => {
+      // Step 2: Success state with checkmark (English)
+      modalSpinner.style.display = 'none';
+      modalSuccessCheck.style.display = 'grid';
+      modalStatusTitle.textContent = 'Coins successfully withdrawn!';
+      modalStatusSubtitle.textContent = `Credited to @${val.replace(/^@/, '')}`;
+      playWinChime(9);
+
+      // Step 3: Transition to Get Coins screen
+      setTimeout(() => {
+        hideModal();
+        plinkoScreen.style.display = 'none';
+        tiktokScreen.style.display = 'none';
+        getCoinsScreen.style.display = 'flex';
+
+        // Render withdrawn balance on Get Coins screen
+        gcLiveBalance.textContent = numFormatter.format(currentBalanceToWithdraw);
+      }, 1500);
+    }, 1800);
+  });
+})();
+</script>
+</body>
+</html>
